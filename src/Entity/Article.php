@@ -5,6 +5,10 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection; 
+use Doctrine\Common\Collections\AbstractLazyCollection; 
+use App\Entity\Categorie; // import Categorie entity
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -60,6 +64,31 @@ class Article
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+    #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'articles')]
+    private Collection $categorie;
+    public function __construct()
+    {
+        $this->categorie = new ArrayCollection();
+    }
+
+    public function getCategorie(): Collection 
+    {
+        return $this->categorie;
+    }
+    public function addCategorie(Categorie $categorie): static 
+    {
+        if (!$this->categorie->contains($categorie)) {
+        $this->categorie[] = $categorie;
+        }
+
+        return $this;
+    }
+    public function removeCategorie(Categorie $categorie): static
+    {
+        $this->categorie->removeElement($categorie);
 
         return $this;
     }
