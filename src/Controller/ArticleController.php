@@ -13,13 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class ArticleController extends AbstractController
 {
-    // #[Route('/article', name: 'app_article')]
-    // public function index(): Response
-    // {
-    //     return $this->render('article/index.html.twig', [
-    //         'controller_name' => 'ArticleController',
-    //     ]);
-    // }
+
     #[Route('/article', name: 'app_article')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
