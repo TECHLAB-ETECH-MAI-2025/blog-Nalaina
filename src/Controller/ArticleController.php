@@ -21,6 +21,7 @@ final class ArticleController extends AbstractController
     {
         return $this->render('article/index.html.twig', [
             'articles' => $articleRepository->findAll(),
+            'form' => $this->createForm(CommentForm::class)->createView(),
         ]);
     }
 
@@ -45,7 +46,7 @@ final class ArticleController extends AbstractController
     }
     // affiche un article et gère l'ajout de commentaires
     // @Route("/article/{id}", name="app_article_show", methods={"GET", "POST"}) 
-    #[Route('/{id}', name: 'app_article_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_article_show', methods: ['GET', 'POST'])]
     public function show(Article $article, Request $request, EntityManagerInterface $entityManager): Response
     {
         // creer un nouveau commentaire
@@ -77,6 +78,7 @@ final class ArticleController extends AbstractController
         // affichage de la vue de l'article
         return $this->render('article/show.html.twig', [
             'article' => $article,
+            'form' => $form->createView(),
         ]);
     }
 

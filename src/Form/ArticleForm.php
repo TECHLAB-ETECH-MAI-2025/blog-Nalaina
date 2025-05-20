@@ -29,7 +29,7 @@ class ArticleForm extends AbstractType
                 'attr' => [
                     'placeholder' => 'Ecrivez le contenu de votre article',
                     'class' => 'form-control',
-                    'rows' => 10,
+                    'rows' => 5,
                     'required' => true,
                 ],
             ])
@@ -38,14 +38,12 @@ class ArticleForm extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'title',
                 'multiple' => true,
-                'expanded' => true,
+                'expanded' => false,// true for checkboxes, false for select
                 'label' => 'Catégories',
                 'attr' => [
-                    'class' => 'form-check',
+                    'class' => 'form-select',
                 ],
-                'label_attr' => [
-                    'class' => 'form-check-label',
-                ],
+                
                 
             ])
         ;

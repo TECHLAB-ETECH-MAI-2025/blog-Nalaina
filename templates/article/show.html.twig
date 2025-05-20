@@ -3,28 +3,41 @@
 {% block title %}Article{% endblock %}
 
 {% block body %}
-    <h1>Article</h1>
+    <h1>Articles</h1>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h2>{{ article.title }}</h2>
+            <p>{{ article.content }}</p>
+            <p class="card-text">
+                <strong>Catégories :</strong>
+                {% for category in article.categories %}
+                    {{ category.title }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ article.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ article.title }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ article.content }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+            <h3>Commentaires</h3>
+            {% if article.comments|length > 0 %}
+                <ul class="list-group mb-4">
+                    {% for comment in article.comments %}
+                        <li class="list-group-item">
+                            <strong>{{ comment.author }}</strong> : {{ comment.content }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucun commentaire pour cet article.</p>
+            {% endif %}
+
+            <h3>Ajouter un commentaire</h3>
+            {% include 'comment/_form.html.twig' with {
+                form: form,
+                action: path('app_article_show', { id: article.id }),
+                button_label: 'Commenter'
+            } %}     
+        </div>
+    </div>
+    
+    
 
     <a href="{{ path('app_article_index') }}">back to list</a>
 
