@@ -22,6 +22,10 @@ Encore
      */
     .addEntry('app', './assets/app.js')
 
+    //new config pour le fichier css article
+    .addEntry('article', './assets/article.js')
+    .addEntry('article_list', './assets/article_list.js')
+
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
 
@@ -39,7 +43,7 @@ Encore
     .cleanupOutputBeforeBuild()
 
     // Displays build status system notifications to the user
-    // .enableBuildNotifications()
+    .enableBuildNotifications()
 
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
