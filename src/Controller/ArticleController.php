@@ -18,8 +18,25 @@ use Knp\Component\Pager\PaginatorInterface; // pour la pagination
 final class ArticleController extends AbstractController
 {
     #[Route(name: 'app_article_index', methods: ['GET'])]
-    public function index(ArticleRepository $articleRepository, PaginatorInterface $paginator, Request $request): Response
+    public function index(
+        ArticleRepository $articleRepository, 
+        PaginatorInterface $paginator, 
+        Request $request,
+        EntityManagerInterface $entityManager
+        ): Response
     {
+        // formulaire d'ajout d'article si tout dans l'index
+        $article = new Article();
+        $form = $this->createForm(ArticleForm::class, $article);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($article);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+        }
+        // Liste des articles
         $query = $articleRepository->createQueryBuilder('a')
             ->orderBy('a.createdAt', 'DESC')
             ->getQuery();
@@ -32,11 +49,11 @@ final class ArticleController extends AbstractController
 
         return $this->render('article/index.html.twig', [
             'articles' => $articleRepository->findAll(),
-            'form' => $this->createForm(CommentForm::class)->createView(),
+            'form' =>$form->createView(),
             'pagination' => $pagination,
         ]);
     }
-
+    // formulaire d'ajout d'article si pas dans l'index
     #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
