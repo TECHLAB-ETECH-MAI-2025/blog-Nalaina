@@ -35,6 +35,9 @@
                 </p>
                 <a class="btn btn-info" href="{{ path('app_article_show', {id: article.id}) }}" class="btn btn-sm btn-info">Voir plus</a>
                 <a class="btn btn-warning" href="{{ path('app_article_edit', {id: article.id}) }}" class="btn btn-sm btn-secondary">Modifier</a>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ article.id }}">Supprimer</button>
+
+                {{ include('article/_actions.html.twig', {article: article}) }}
             </div>
         </div>
     {% else %}
