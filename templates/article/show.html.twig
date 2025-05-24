@@ -2,6 +2,17 @@
 
 {% block title %}Article{% endblock %}
 
+{# liens styles css #}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('article') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('article') }}
+{% endblock %}
+
 {% block body %}
     <h1>Articles</h1>
     <div class="card mb-3">
@@ -14,18 +25,18 @@
                     {{ category.title }}{% if not loop.last %}, {% endif %}
                 {% endfor %}
             </p>
+            <p> article likes:{{ article.likes|length }}</p>
+            <p>Publié le : {{ article.createdAt|date('d/m/Y H:i') }}</p>
 
             <h3>Commentaires</h3>
             {% if article.comments|length > 0 %}
-                <ul class="list-group mb-4">
-                    {% for comment in article.comments %}
-                        <li class="list-group-item">
-                            <strong>{{ comment.author }}</strong> : {{ comment.content }}
-                        </li>
+                    {% for comment in article.comments|sort((a, b)=> b.createdAt <=> a.createdAt) %}
+                         {% include 'comment/_comment.html.twig' with {'comment': comment} %}                   
                     {% endfor %}
-                </ul>
             {% else %}
-                <p>Aucun commentaire pour cet article.</p>
+                <div class="alert alert-info">
+                    Aucun commentaire pour le moment. Soyez le premier à réagir !
+                </div>
             {% endif %}
 
             <h3>Ajouter un commentaire</h3>

@@ -1,13 +1,25 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %}Articles{% endblock %}
+
+{# liens css et js article_list #}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('article_list') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('article_list') }}
+{% endblock %}
 
 {% block body %}
     <h1 class="text-center">Mon Blog</h1>
 
-    {{ include('article/_form.html.twig') }}
+    {{ include('article/_form.html.twig') }} 
 
-   
+
     <h1>Listes des articles</h1>
 
     {% for article in pagination %}
