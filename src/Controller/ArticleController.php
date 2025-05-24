@@ -17,7 +17,7 @@ use Knp\Component\Pager\PaginatorInterface; // pour la pagination
 #[Route('/article')]
 final class ArticleController extends AbstractController
 {
-    #[Route(name: 'app_article_index', methods: ['GET'])]
+    #[Route(name: 'app_article_index', methods: ['GET', 'POST'])]
     public function index(
         ArticleRepository $articleRepository, 
         PaginatorInterface $paginator, 
@@ -129,7 +129,7 @@ final class ArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_article_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_article_delete', methods: ['POST'])]
     public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->getPayload()->getString('_token'))) {

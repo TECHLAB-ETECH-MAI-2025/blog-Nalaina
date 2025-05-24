@@ -3,15 +3,15 @@
 {% block title %}Category index{% endblock %}
 
 {% block body %}
-    <h1>Category index</h1>
+    <h1>Liste des catégories</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Title</th>
+                <th>Titre</th>
                 <th>Description</th>
-                <th>CreatedAt</th>
+                <th>Créé le </th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -23,8 +23,8 @@
                 <td>{{ category.description }}</td>
                 <td>{{ category.createdAt ? category.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_category_show', {'id': category.id}) }}">show</a>
-                    <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
+                    <a class="btn btn-info mx-2" href="{{ path('app_category_show', {'id': category.id}) }}">Voir</a>
+                    <a class="btn  btn-warning mx-2" href="{{ path('app_category_edit', {'id': category.id}) }}">Editer</a>
                 </td>
             </tr>
         {% else %}
@@ -35,5 +35,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_category_new') }}">Create new</a>
+    <a href="{{ path('app_category_new') }}" class="btn btn-primary">Créer nouveau</a>
 {% endblock %}

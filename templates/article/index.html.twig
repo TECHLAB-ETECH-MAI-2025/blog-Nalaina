@@ -21,8 +21,8 @@
                         {{ category.title }}{% if not loop.last %}, {% endif %}
                     {% endfor %}
                 </p>
-                <a href="{{ path('app_article_show', {id: article.id}) }}" class="btn btn-sm btn-info">Voir plus</a>
-                <a href="{{ path('app_article_edit', {id: article.id}) }}" class="btn btn-sm btn-secondary">Modifier</a>
+                <a class="btn btn-info" href="{{ path('app_article_show', {id: article.id}) }}" class="btn btn-sm btn-info">Voir plus</a>
+                <a class="btn btn-warning" href="{{ path('app_article_edit', {id: article.id}) }}" class="btn btn-sm btn-secondary">Modifier</a>
             </div>
         </div>
     {% else %}

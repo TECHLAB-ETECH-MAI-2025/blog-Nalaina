@@ -12,7 +12,7 @@
                 <td>{{ category.id }}</td>
             </tr>
             <tr>
-                <th>Title</th>
+                <th>Titre</th>
                 <td>{{ category.title }}</td>
             </tr>
             <tr>
@@ -20,15 +20,15 @@
                 <td>{{ category.description }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
+                <th>Crée le:</th>
                 <td>{{ category.createdAt ? category.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_category_index') }}">back to list</a>
+    <a class="btn btn-sencondary" href="{{ path('app_category_index') }}">Revenir à la liste</a>
 
-    <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
+    <a class="btn btn-warning" href="{{ path('app_category_edit', {'id': category.id}) }}">editer</a>
 
     {{ include('category/_delete_form.html.twig') }}
 {% endblock %}
