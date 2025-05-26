@@ -180,4 +180,15 @@ class Article
     {
         return $this->likes->count();
     }   
+
+    public function isLikedByIp(?string $ipAddress): bool
+    {
+        foreach ($this->getLikes() as $like) {
+            if ($like->getIpAddress() === $ipAddress) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -52,8 +52,10 @@ import $ from 'jquery';
 			const articleId = $likeButton.data('article-id');
 
 			$likeButton.on('click', function() {
+				alert('ok')
+				const url = $(this).data('url');
 				$.ajax({
-					url: `/article/${articleId}/like`,
+					url: url,
 					method: 'POST',
 					dataType: 'json',
 					success: function(response) {
@@ -64,7 +66,7 @@ import $ from 'jquery';
 							// Mettre à jour le compteur de likes
 							$('#likes-count').text(response.likesCount);
 						}
-					}
+					}.bind(this),
 				});
 			});
 

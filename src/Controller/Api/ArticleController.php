@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-#[Route('/api', name: 'api_')]  
+#[Route('/api')]  
 class ArticleController extends AbstractController
 {   
     #[Route('/article/datatable', name: 'api_articles_datatable', methods: ['GET'])]
@@ -150,7 +150,7 @@ class ArticleController extends AbstractController
         ], Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/article/{id}/like', name: 'api_article_like', methods: ['POST'])]
+    #[Route('/api/article/{id}/like', name: 'api_article_like', methods: ['GET','POST'])]
     public function likeArticle(
         Article $article,
         Request $request,
@@ -163,7 +163,7 @@ class ArticleController extends AbstractController
         // Vérifier si l'utilisateur a déjà aimé cet article
         $existingLike = $articleLikeRepository->findOneBy([
             'article' => $article,
-            'ipAdress' => $ipAddress,
+            'ipAddress' => $ipAddress,
         ]);
 
         if ($existingLike) {
@@ -174,7 +174,7 @@ class ArticleController extends AbstractController
             return new JsonResponse([
                 'success' => true,
                 'liked' => 'false',
-                'likeCount' => $article->getLikes()->count(),
+                'likesCount' => $article->getLikes()->count(),
             ]);
         }else {
             // Sinon, ajouter un nouveau like
