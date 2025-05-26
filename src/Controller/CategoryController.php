@@ -10,15 +10,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Knp\Component\Pager\PaginatorInterface; // pour la pagination
 
 #[Route('/category')]
 final class CategoryController extends AbstractController
 {
-    #[Route(name: 'app_category_index', methods: ['GET'])]
-    public function index(CategoryRepository $categoryRepository): Response
+    #[Route(name: 'app_category_index', methods: ['GET', 'POST'])]
+    public function index(CategoryRepository $categoryRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $query = $categoryRepository->createQueryBuilder('c')
+            ->orderBy('c.createdAt', 'DESC')
+            ->getQuery();
+        
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1), // numéro de la page
+            5 // limite par page
+        );
+
         return $this->render('category/index.html.twig', [
             'categories' => $categoryRepository->findAll(),
+            'pagination' => $pagination,
         ]);
     }
 

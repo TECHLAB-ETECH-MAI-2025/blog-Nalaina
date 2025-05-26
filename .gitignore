@@ -50,3 +50,40 @@
 
 # Embedded web-server pid file
 /.web-server-pid
+
+# Symfony
+/var/
+/vendor/
+/.env.local
+/.env.local.php
+/.env.test
+/.env.dev
+/.env.prod
+
+# Logs & Cache
+/var/log/
+/var/cache/
+
+# Composer
+composer.lock
+
+# Node / Webpack Encore
+/node_modules/
+/public/build/
+/public/hot
+
+# IDEs et OS
+/.idea/
+/*.sublime-project
+*.sublime-workspace
+*.swp
+.DS_Store
+Thumbs.db
+
+# Tests
+/phpunit.xml
+/phpunit.result.cache
+
+# Autres
+*.lock
+*.log

@@ -17,7 +17,7 @@ use Knp\Component\Pager\PaginatorInterface; // pour la pagination
 #[Route('/article')]
 final class ArticleController extends AbstractController
 {
-    #[Route(name: 'app_article_index', methods: ['GET'])]
+    #[Route(name: 'app_article_index', methods: ['GET', 'POST'])]
     public function index(
         ArticleRepository $articleRepository, 
         PaginatorInterface $paginator, 

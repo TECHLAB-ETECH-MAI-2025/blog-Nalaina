@@ -3,11 +3,8 @@
 {% block title %}Articles{% endblock %}
 
 {% block body %}
-    <h1 class="text-center">Mon Blog</h1>
-
     {{ include('article/_form.html.twig') }}
 
-   
     <h1>Listes des articles</h1>
 
     {% for article in pagination %}
@@ -30,7 +27,8 @@
     {% endfor %}
 
     <div class="d-flex justify-content-center mt-4">
-        {{ knp_pagination_render(pagination) }}
+        {{ knp_pagination_render(pagination, 'pagination/pagination.html.twig') }}
     </div>
+
 
 {% endblock %}
