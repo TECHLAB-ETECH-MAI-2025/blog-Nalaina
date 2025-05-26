@@ -1,0 +1,13 @@
+<div class="card mb-3 shadow-sm">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">
+            {{ comment.author }} 
+            <small class="text-secondary float-end">
+                {{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}
+            </small>
+        </h6>
+        <p class="card-text">
+            {{ comment.content }}
+        </p>
+    </div>
+</div>
