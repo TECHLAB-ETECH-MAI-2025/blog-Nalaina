@@ -49,10 +49,8 @@ import $ from 'jquery';
 
 			// Système de "j'aime" en AJAX
 			const $likeButton = $('.like-button');
-			const articleId = $likeButton.data('article-id');
 
 			$likeButton.on('click', function() {
-				alert('ok')
 				const url = $(this).data('url');
 				$.ajax({
 					url: url,
