@@ -72,16 +72,25 @@ import $ from 'jquery';
 
 			// Fonction pour afficher des alertes
 			function showAlert(type, message) {
-				const $alert = $(`
-					${message}
-
-				`);
+				const $alert = $('<div>')
+					.addClass(`alert alert-${type} alert-dismissible fade show mt-3`)
+					.attr('role', 'alert')
+					.text(message) // <-- sécurise le message
+					.append(
+						$('<button>')
+							.addClass('btn-close')
+							.attr({
+								type: 'button',
+								'data-bs-dismiss': 'alert',
+								'aria-label': 'Fermer'
+							})
+					);
 
 				$('#alerts-container').append($alert);
 
 				// Faire disparaître l'alerte après 5 secondes
 				setTimeout(() => {
-					$alert.alert('close');
+					$alert.remove();
 				}, 5000);
 			}
 		});

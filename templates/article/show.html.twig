@@ -34,23 +34,35 @@
             <p> article likes:{{ article.likes|length }}</p>
             <p>Publié le : {{ article.createdAt|date('d/m/Y H:i') }}</p>
 
-            <h3>Commentaires</h3>
-            {% if article.comments|length > 0 %}
-                    {% for comment in article.comments|sort((a, b)=> b.createdAt <=> a.createdAt) %}
-                         {% include 'comment/_comment.html.twig' with {'comment': comment} %}                   
-                    {% endfor %}
-            {% else %}
-                <div class="alert alert-info">
-                    Aucun commentaire pour le moment. Soyez le premier à réagir !
-                </div>
-            {% endif %}
-
+            <h3>
+                Commentaires <span class="badge bg-secondary" id="comments-count">{{ article.comments|length }}</span>
+            </h3>
+            <div id="alerts-container"></div>
+            <div id="comments-list">
+                {% if app.user and app.user.isAdmin() %}
+                    <div class="alert alert-info">
+                        Vous êtes connecté en tant qu'administrateur.
+                    </div>
+                {% endif %}
+                {% if article.comments|length > 0 %}
+                        {% for comment in article.comments|sort((a, b)=> b.createdAt <=> a.createdAt) %}
+                            {% include 'comment/_comment.html.twig' with {'comment': comment} %}                   
+                        {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">
+                        Aucun commentaire pour le moment. Soyez le premier à réagir !
+                    </div>
+                {% endif %}
+            </div>
+        
             <h3>Ajouter un commentaire</h3>
             {% include 'comment/_form.html.twig' with {
                 form: form,
-                action: path('app_article_show', { id: article.id }),
+                article: article,
+                action: path('api_article_comment', { id: article.id }),
                 button_label: 'Commenter'
-            } %}     
+            } %}
+     
         </div>
     </div>
     
@@ -60,5 +72,4 @@
 
     <a class="btn btn-warning" href="{{ path('app_article_edit', {'id': article.id}) }}">editer</a>
 
-    {{ include('article/_actions.html.twig') }}
 {% endblock %}

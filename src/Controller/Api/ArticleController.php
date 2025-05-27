@@ -129,7 +129,7 @@ class ArticleController extends AbstractController
 
             return new JsonResponse([
                 'success' => true,
-                'commentHtml' => $this->renderView('article/_comment.html.twig', [
+                'commentHtml' => $this->renderView('comment/_comment.html.twig', [
                     'comment' => $comment,
                 ]),
 
