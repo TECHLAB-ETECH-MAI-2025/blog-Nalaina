@@ -25,9 +25,9 @@
                     {{ category.title }}{% if not loop.last %}, {% endif %}
                 {% endfor %}
             </p>
-            <button class="like-button {{ article.isLikedByIp(app.request.clientIp) ? 'liked' : '' }}"data-article-id="{{ article.id }}" data-url="{{ path('api_article_like', {id: article.id}) }}">
+            {# <button class="like-button {{ article.isLikedByIp(app.request.clientIp) ? 'liked' : '' }}"data-article-id="{{ article.id }}" data-url="{{ path('api_article_like', {id: article.id}) }}">
             ❤️ J’aime <span id="likes-count">{{ article.getLikeCount() }}</span>
-        </button>
+        </button> #}
 
 
 

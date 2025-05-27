@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[Route('/api')]  
 class ArticleController extends AbstractController
 {   
-    #[Route('/article/datatable', name: 'api_articles_datatable', methods: ['GET'])]
+    #[Route('/article/datatable', name: 'api_articles_datatable', methods: [ 'POST'])]
     public function datatable(
         Request $request,
         ArticleRepository $articleRepository
@@ -61,11 +61,8 @@ class ArticleController extends AbstractController
 
             $data[] = [
                 'id' => $article->getId(),
-                'title' =>  sprintf('%s',
-                    $this->generateUrl('app_article_show', ['id' => $article->getId()]),
-                    htmlspecialchars($article->getTitle())
-                ),
-                'categories' => implode(' ', $categoryNames),
+                'title' => sprintf('<a href="/article/%d">%s</a>', $article->getId(), htmlspecialchars($article->getTitle())),
+                'categories' => implode(', ', $categoryNames),
                 'commentsCount' => $article->getComments()->count(),
                 'likesCount' => $article->getLikes()->count(),
                 'createdAt' => $article->getCreatedAt()->format('d/m/Y H:i'),

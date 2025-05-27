@@ -10,7 +10,7 @@ import $ from 'jquery';
 			serverSide: true,
 			responsive: true,
 			ajax: {
-				url: '/api/articles',
+				url: '/api/article/datatable',
 				type: 'POST'
 			},
 			columns: [
@@ -20,8 +20,23 @@ import $ from 'jquery';
 				{ data: 'commentsCount' },
 				{ data: 'likesCount' },
 				{ data: 'createdAt' },
-				{ data: 'actions', orderable: false, searchable: false }
+				{ data: 'actions',title:'Actions', orderable: false, searchable: false }
 			],
+			columnDefs: [
+				{
+					targets: 1, // Colonne "Titre"
+					render: function(data, type, row) {
+						return data; // le HTML du lien est déjà généré côté serveur
+					}
+				},
+				{
+					targets: 6, // Colonne "Actions"
+					render: function(data, type, row) {
+						return data; // idem, HTML déjà généré
+					}
+				}
+			],
+
 			language: {
 				url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json'
 			},

@@ -18,7 +18,8 @@ class ArticleRepository extends ServiceEntityRepository
     /**
      * filtre pour les articles
      */
-    public function filterByDatatable(
+    
+    public function findForDatatable(
         int $start,
         int $length,
         array $search = [],
@@ -27,23 +28,25 @@ class ArticleRepository extends ServiceEntityRepository
     ): array {
         $qb = $this->createQueryBuilder('a')
             ->leftJoin('a.categories', 'c')
-            ->leftJoin('a.comments', 'com')
-            ->leftJoin('a.likes', 'l')
-            ->groupBy('a.id');
+            ->addSelect('c') 
+            // Subquery pour compter les commentaires
+            ->addSelect('(SELECT COUNT(com.id) FROM App\Entity\Comment com WHERE com.article = a.id) AS HIDDEN commentsCount')
+            // Subquery pour compter les likes
+            ->addSelect('(SELECT COUNT(l.id) FROM App\Entity\ArticleLike l WHERE l.article = a.id) AS HIDDEN likesCount');
 
         // Appliquer la recherche si elle existe
-        if ($search) {
+        if (!empty($search['value'])) {
             $qb->andWhere('a.title LIKE :search OR c.title LIKE :search')
                 ->setParameter('search', '%' . $search['value'] . '%');
         }
 
-        // compter le nombre total d'articles
+        // Compter le nombre total
         $totalCount = $this->createQueryBuilder('a')
             ->select('COUNT(a.id)')
             ->getQuery()
             ->getSingleScalarResult();
-        
-        // compter le nombre d'articles filtrés
+
+        // Compter le nombre filtré
         $filteredCountQB = clone $qb;
         $filteredCount = $filteredCountQB
             ->select('COUNT(DISTINCT a.id)')
@@ -52,11 +55,9 @@ class ArticleRepository extends ServiceEntityRepository
 
         // Appliquer le tri
         if ($orderColumn === 'commentsCount') {
-            $qb->addSelect('COUNT(com.id) AS commentsCount')
-                ->orderBy('commentsCount', $orderDir);
+            $qb->orderBy('commentsCount', $orderDir);
         } elseif ($orderColumn === 'likesCount') {
-            $qb->addSelect('COUNT(l.id) AS likesCount')
-                ->orderBy('likesCount', $orderDir);
+            $qb->orderBy('likesCount', $orderDir);
         } elseif ($orderColumn === 'categories') {
             $qb->orderBy('c.title', $orderDir);
         } else {
@@ -65,32 +66,15 @@ class ArticleRepository extends ServiceEntityRepository
 
         // Appliquer la pagination
         $qb->setFirstResult($start)
-            ->setMaxResults($length);
+        ->setMaxResults($length);
 
         return [
             'data' => $qb->getQuery()->getResult(),
             'totalCount' => (int) $totalCount,
             'filteredCount' => (int) $filteredCount,
         ];
-        // // Recherche
-        // if (!empty($search['value'])) {
-        //     $qb->andWhere('a.title LIKE :search OR a.content LIKE :search')
-        //         ->setParameter('search', '%' . $search['value'] . '%');
-        // }
-
-        // // Tri
-        // $qb->orderBy($orderColumn, $orderDir);
-
-        // // Pagination
-        // $qb->setFirstResult($start)
-        //     ->setMaxResults($length);
-
-        // return [
-        //     'data' => $qb->getQuery()->getResult(),
-        //     'total' => count($this->findAll()),
-        //     'filtered' => count($qb->getQuery()->getResult())
-        // ];
     }
+
 
     /**
      * Recherche des articles par titre
@@ -107,29 +91,4 @@ class ArticleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
-    //    /**
-    //     * @return Article[] Returns an array of Article objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Article
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }
