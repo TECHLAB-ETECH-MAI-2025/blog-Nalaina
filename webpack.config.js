@@ -25,6 +25,7 @@ Encore
     //new config pour le fichier css article
     .addEntry('article', './assets/article.js')
     .addEntry('article_list', './assets/article_list.js')
+    .addEntry('category_list', './assets/category_list.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
