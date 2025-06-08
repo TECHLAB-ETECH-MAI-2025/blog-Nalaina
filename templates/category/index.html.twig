@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Liste des catégories</h1>
 
-    <table class="table" id="categorie-table">
+    <table class="table" id="">
         <thead>
             <tr>
                 <th>Id</th>
@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-        {# {% for category in pagination %}
+        {% for category in pagination %}
             <tr>
                 <td>{{ category.id }}</td>
                 <td>{{ category.title }}</td>
@@ -31,7 +31,7 @@
             <tr>
                 <td colspan="5">no records found</td>
             </tr>
-        {% endfor %} #}
+        {% endfor %}
         </tbody>
     </table>
     <div class="d-flex justify-content-center mt-4">
