@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row">
+        <!-- Menu latéral -->
+        <div class="col-md-3 mb-4">
+            <div class="list-group">
+                <span class="list-group-item list-group-item-secondary fw-bold">Menu</span>
+                <a href="{{ path('app_profile') }}" class="list-group-item list-group-item-action">Mon profil</a>
+                <a href="#" class="list-group-item list-group-item-action active">Modifier mon profil</a>
+                <a href="{{ path('app_profile_change_password') }}" class="list-group-item list-group-item-action">Changer mon mot de passe</a>
+                <a href="{{ path('app_profile_logout') }}" class="list-group-item list-group-item-action text-danger">Déconnexion</a>
+            </div>
+        </div>
+
+        <!-- Formulaire -->
+        <div class="col-md-9">
+            <h2 class="mb-4">Modifier mon profil</h2>
+
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {{ form_start(profileForm) }}
+
+                    <div class="mb-3">
+                        {{ form_label(profileForm.firstName, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(profileForm.firstName, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(profileForm.firstName) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(profileForm.lastName, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(profileForm.lastName, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(profileForm.lastName) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(profileForm.email, 'Adresse email', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(profileForm.email, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(profileForm.email) }}
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                    </div>
+
+                    {{ form_end(profileForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

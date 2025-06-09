@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row">
+        <!-- Menu latéral -->
+        <div class="col-md-3 mb-4">
+            <div class="list-group">
+                <span class="list-group-item list-group-item-secondary fw-bold">Menu</span>
+                <a href="#" class="list-group-item list-group-item-action active">Mon profil</a>
+                <a href="{{ path('app_profile_edit') }}" class="list-group-item list-group-item-action">Modifier mon profil</a>
+                <a href="{{ path('app_profile_change_password') }}" class="list-group-item list-group-item-action">Changer mon mot de passe</a>
+                <a href="{{ path('app_logout') }}" class="list-group-item list-group-item-action text-danger">Déconnexion</a>
+            </div>
+        </div>
+
+        <!-- Contenu du profil -->
+        <div class="col-md-9">
+
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <div class="avatar-placeholder mb-3 mx-auto">
+                        {{ app.user.firstName|slice(0,1)|upper }}{{ app.user.lastName|slice(0,1)|upper }}
+                    </div>
+                    <h4 class="mb-1">{{ app.user.fullName }}</h4>
+                    <p class="text-muted mb-0">{{ app.user.email }}</p>
+                    <span class="badge {{ app.user.isVerified ? 'bg-success' : 'bg-warning text-dark' }}">
+                        {{ app.user.isVerified ? 'Email vérifié' : 'Email non vérifié' }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Informations personnelles -->
+                <div class="col-md-6">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-light fw-bold">Informations personnelles</div>
+                        <div class="card-body">
+                            <p><strong>Prénom :</strong> {{ app.user.firstName|default('Non renseigné') }}</p>
+                            <p><strong>Nom :</strong> {{ app.user.lastName|default('Non renseigné') }}</p>
+                            <p><strong>Email :</strong> {{ app.user.email }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informations du compte -->
+                <div class="col-md-6">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-light fw-bold">Informations du compte</div>
+                        <div class="card-body">
+                            <p><strong>Date d'inscription :</strong> {{ app.user.createdAt|date('d/m/Y') }}</p>
+                            <p><strong>Rôle :</strong>
+                                {% if 'ROLE_ADMIN' in app.user.roles %}
+                                    Administrateur
+                                {% else %}
+                                    Utilisateur
+                                {% endif %}
+                            </p>
+                            <p><strong>Statut :</strong>
+                                <span class="badge {{ app.user.isVerified ? 'bg-success' : 'bg-warning text-dark' }}">
+                                    {{ app.user.isVerified ? 'Vérifié' : 'Non vérifié' }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end">
+                <a href="{{ path('app_profile_edit') }}" class="btn btn-primary">Modifier mon profil</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .avatar-placeholder {
+            width: 100px;
+            height: 100px;
+            background-color: #4361ee;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+{% endblock %}
