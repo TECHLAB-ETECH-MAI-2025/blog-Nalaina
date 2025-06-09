@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% set show_navbar = false %}
+
+{% block title %}Réinitialisation de mot de passe{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-info text-white text-center">
+                    <h4 class="mb-0">Réinitialiser votre mot de passe</h4>
+                </div>
+
+                <div class="card-body">
+
+                    {% for flash_error in app.flashes('reset_password_error') %}
+                        <div class="alert alert-danger">
+                            {{ flash_error }}
+                        </div>
+                    {% endfor %}
+
+                    <p class="mb-4 text-center">
+                        Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+                    </p>
+
+                    {{ form_start(requestForm) }}
+
+                        <div class="mb-3">
+                            {{ form_label(requestForm.email, 'Adresse email', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(requestForm.email, {'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'exemple@domaine.com'
+                            }}) }}
+                            {{ form_errors(requestForm.email) }}
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-info text-white">
+                                <i class="fas fa-envelope me-1"></i>
+                                Envoyer le lien de réinitialisation
+                            </button>
+                        </div>
+
+                    {{ form_end(requestForm) }}
+
+                </div>
+
+                <div class="card-footer text-center bg-light">
+                    <a href="{{ path('app_login') }}" class="text-decoration-none">
+                        <i class="fas fa-arrow-left me-1"></i> Retour à la connexion
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
