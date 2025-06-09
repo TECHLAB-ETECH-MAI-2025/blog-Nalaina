@@ -3,11 +3,13 @@
 namespace App\Form;
 
 use App\Entity\User;
-use Dom\Text;
+// use Dom\Text;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -19,7 +21,7 @@ class RegistrationForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName', Text::class, [
+            ->add('firstName', TextType::class, [
                 'label' => 'Prénom',
                 'required' => false,
                 'attr' =>[
@@ -27,7 +29,7 @@ class RegistrationForm extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
-            ->add('lastName', Text::class, [
+            ->add('lastName', TextType::class, [
                 'label' => 'Nom',
                 'required' => false,
                 'attr' =>[
@@ -66,7 +68,7 @@ class RegistrationForm extends AbstractType
                     'class' => 'form-check-label',
                 ],
             ])
-            ->add('plainPassword', PasswordType::class, [
+            ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'type' => PasswordType::class,
