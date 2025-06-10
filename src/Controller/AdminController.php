@@ -17,6 +17,7 @@ final class AdminController extends AbstractController
     #[Route('/admin', name: 'app_admin')]
     public function index( UserRepository $userRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $userCount = $userRepository->count([]);
         $verifiedCount = $userRepository->count(['isVerified' => true]);
         $adminCount = $userRepository->countAdmins();
