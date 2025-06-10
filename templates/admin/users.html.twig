@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs{% endblock %}
+
+{% block body %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Menu latéral -->
+        <div class="col-md-3 mb-4">
+            <div class="list-group shadow-sm">
+                <a href="{{ path('app_admin') }}" class="list-group-item list-group-item-action">
+                    Tableau de bord
+                </a>
+                <a href="{{ path('app_admin_users') }}" class="list-group-item list-group-item-action active">
+                    Gestion des utilisateurs
+                </a>
+                <a href="{{ path('app_home') }}" class="list-group-item list-group-item-action">
+                    Retour au site
+                </a>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Gestion des utilisateurs</h2>
+                <a href="{{ path('app_admin_users_new') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i> Nouvel utilisateur
+                </a>
+            </div>
+
+            <!-- Messages flash -->
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% if users is not empty %}
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle shadow-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Rôles</th>
+                                <th>Vérifié</th>
+                                <th>Inscription</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                                <tr>
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.fullName }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>
+                                        {% for role in user.roles %}
+                                            {% if role == 'ROLE_ADMIN' %}
+                                                <span class="badge bg-primary">Admin</span>
+                                            {% elseif role == 'ROLE_SUPER_ADMIN' %}
+                                                <span class="badge bg-danger">Super Admin</span>
+                                            {% elseif role == 'ROLE_USER' %}
+                                                <span class="badge bg-secondary">Utilisateur</span>
+                                            {% else %}
+                                                <span class="badge bg-warning text-dark">{{ role }}</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% if user.isVerified %}
+                                            <span class="text-success">Oui</span>
+                                        {% else %}
+                                            <span class="text-danger">Non</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ user.createdAt|date('d/m/Y') }}</td>
+                                    <td>
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ path('app_admin_users_edit', {'id': user.id}) }}" class="btn btn-sm btn-outline-secondary">
+                                                Modifier
+                                            </a>
+
+                                            {% if user != app.user %}
+                                                <!-- Bouton qui déclenche la modale -->
+                                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ user.id }}">
+                                                    Supprimer
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Modale de confirmation -->
+                                <div class="modal fade" id="confirmDeleteModal{{ user.id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation de suppression</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Êtes-vous sûr de vouloir supprimer l'utilisateur
+                                                <strong>{{ user.fullName }}</strong> ({{ user.email }}) ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <form method="post" action="{{ path('app_admin_users_delete', {'id': user.id}) }}">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    Aucun utilisateur trouvé.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
