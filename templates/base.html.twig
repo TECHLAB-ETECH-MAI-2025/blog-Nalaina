@@ -24,12 +24,84 @@
         {% endblock %}
     </head>
     <body>
-        {% if show_navbar is not defined or show_navbar %}
+        {# {% if show_navbar is not defined or show_navbar %}
             {% include '_navbar.html.twig' %}
-        {% endif %}
+        {% endif %} #}
 
-        <div class="container mt-4">
+        {# <div class="container mt-4"> #}
+            {# {% block body %}{% endblock %} #}
+        {# </div> #}
+        <body class="d-flex flex-column min-vh-100 bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ path('app_home') }}">Symfony Security</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+                    </li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_admin') }}">Administration</a>
+                        </li>
+                    {% endif %}
+                </ul>
+
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    {% if app.user %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_category_index') }}">Catégories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_article_index') }}">Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_comment_index') }}">Commentaires</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-user"></i> {{ app.user.fullName|default(app.user.email) }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="{{ path('app_profile') }}">Mon profil</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_profile_edit') }}">Modifier mon profil</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_profile_change_password') }}">Changer de mot de passe</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow-1 py-4">
+        <div class="container">
             {% block body %}{% endblock %}
         </div>
+    </main>
+
+    <footer class="text-center text-muted py-3 border-top" style="background-color: #f1f8ff;">
+        © {{ "now"|date("Y") }} Symfony Security - Tous droits réservés
+    </footer>
+
+    {# Bootstrap JS Bundle #}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     </body>
 </html>
