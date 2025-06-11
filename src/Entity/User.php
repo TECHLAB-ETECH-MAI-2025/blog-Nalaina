@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Entity\Message;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -51,14 +52,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Message>
      */
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'sender')]
-    private Collection $messages;
+    private Collection $sentMessages;
+
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'receiver')]
+    private Collection $receivedMessages;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->roles = ['ROLE_USER']; 
         $this->isVerified = false;
-        $this->messages = new ArrayCollection(); 
+        $this->sentMessages = new ArrayCollection();
+        $this->receivedMessages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,6 +93,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
+    public function getSentMessages(Message $message): self
+    {
+        if (!$this->sentMessages->contains($message)) {
+            $this->sentMessages[] = $message;
+            $message->setSender($this);
+        }
+        return $this;
+    }
+
+    public function getReceivedMessages(): Collection
+    {
+        return $this->receivedMessages;
+    }
+
+    public function addReceivedMessage(Message $message): self
+    {
+        if (!$this->receivedMessages->contains($message)) {
+            $this->receivedMessages[] = $message;
+            $message->setReceiver($this);
+        }
+        return $this;
+    }
     /**
      * @see UserInterface
      */
@@ -189,35 +216,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this->email;
-    }
-
-    /**
-     * @return Collection<int, Message>
-     */
-    public function getMessages(): Collection
-    {
-        return $this->messages;
-    }
-
-    public function addMessage(Message $message): static
-    {
-        if (!$this->messages->contains($message)) {
-            $this->messages->add($message);
-            $message->setSender($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMessage(Message $message): static
-    {
-        if ($this->messages->removeElement($message)) {
-            // set the owning side to null (unless already changed)
-            if ($message->getSender() === $this) {
-                $message->setSender(null);
-            }
-        }
-
-        return $this;
     }
 }
