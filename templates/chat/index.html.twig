@@ -1,20 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ChatController!{% endblock %}
+{% block title %}Chat avec {{ receiver.username }}{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container mt-4">
+    <h2 class="mb-4">Chat avec {{ receiver.username }}</h2>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div id="chat-messages" class="border rounded p-3 mb-3 bg-light" style="height: 400px; overflow-y: auto;">
+        {% for message in messages %}
+            <div class="mb-2 {% if message.sender == app.user %}text-end{% endif %}">
+                <div class="fw-bold">{{ message.sender.username }}</div>
+                <div>{{ message.content }}</div>
+                <small class="text-muted">{{ message.createdAt|date('H:i:s') }}</small>
+            </div>
+        {% else %}
+            <div class="text-muted text-center">Aucun message pour le moment.</div>
+        {% endfor %}
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>E:/projets-symfony/blog/src/Controller/ChatController.php</code></li>
-        <li>Your template at <code>E:/projets-symfony/blog/templates/chat/index.html.twig</code></li>
-    </ul>
+    {{ form_start(form) }}
+        <div class="input-group">
+            {{ form_widget(form.content, {'attr': {'class': 'form-control', 'placeholder': 'Écrivez un message...'}}) }}
+            <button class="btn btn-primary" type="submit">Envoyer</button>
+        </div>
+    {{ form_end(form) }}
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatBox = document.getElementById('chat-messages');
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    if (window.location.protocol !== 'file:') {
+        setInterval(() => {
+            fetch("{{ path('chat_index', {'receiverId': receiver.id}) }}", {
+                method: 'GET',
+                headers: {
+                    'Accept': 'text/html',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Erreur réseau : ' + response.status);
+                return response.text();
+            })
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newMessages = doc.getElementById('chat-messages');
+                if (newMessages) {
+                    document.getElementById('chat-messages').innerHTML = newMessages.innerHTML;
+                }
+            })
+            .catch(error => {
+                console.error('Erreur de polling :', error);
+                document.getElementById('chat-messages').innerHTML +=
+                    '<div class="text-danger">Erreur de chargement des messages.</div>';
+            });
+        }, 5000);
+    } else {
+        console.log("Mode local - polling désactivé.");
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatBox = document.getElementById('chat-messages');
+            if (chatBox) {
+                chatBox.innerHTML += `
+                    <div class="alert alert-info mt-3">
+                        <strong>Note :</strong> Le rafraîchissement automatique est désactivé en mode local.
+                    </div>`;
+            }
+        });
+    }
+</script>
 {% endblock %}
