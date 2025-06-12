@@ -2,6 +2,10 @@
 
 {% block title %}Chat avec {{ receiver.username }}{% endblock %}
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('chat') }}
+{% endblock %}
+
 {% block body %}
 <div class="container mt-4">
     <h2 class="mb-4">Chat avec {{ receiver.username }}</h2>
@@ -20,8 +24,8 @@
 
     {{ form_start(form) }}
         <div class="input-group">
-            {{ form_widget(form.content, {'attr': {'class': 'form-control', 'placeholder': 'Écrivez un message...'}}) }}
-            <button class="btn btn-primary" type="submit">Envoyer</button>
+            {{ form_widget(form.content, {'attr': {'id': 'message-content', 'class': 'form-control', 'placeholder': 'Écrivez un message...'}}) }}
+            <button class="btn btn-primary" id="send-message" type="button">Envoyer</button>
         </div>
     {{ form_end(form) }}
 </div>

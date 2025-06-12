@@ -26,7 +26,7 @@ Encore
     .addEntry('article', './assets/article.js')
     .addEntry('article_list', './assets/article_list.js')
     .addEntry('category_list', './assets/category_list.js')
-
+    .addEntry('chat', './assets/chat.js')
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
 
