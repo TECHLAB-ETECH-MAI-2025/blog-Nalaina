@@ -21,6 +21,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $username = null;
+
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
@@ -59,9 +62,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->roles = ['ROLE_USER']; 
-        $this->isVerified = false;
+        // $this->createdAt = new \DateTimeImmutable();
+        // $this->roles = ['ROLE_USER']; 
+        // $this->isVerified = false;
         $this->sentMessages = new ArrayCollection();
         $this->receivedMessages = new ArrayCollection();
     }
@@ -69,6 +72,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -90,10 +105,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return  $this->username ?? $this->email;
     }
 
-    public function getSentMessages(Message $message): self
+    public function getSentMessages(): Collection
+    {
+        return $this->sentMessages;
+    }
+
+    public function addSentMessage(Message $message): self
     {
         if (!$this->sentMessages->contains($message)) {
             $this->sentMessages[] = $message;

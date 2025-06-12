@@ -15,14 +15,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class ChatController extends AbstractController
 {
-    #[Route('/chat', name: 'app_chat')]
+    #[Route('/chat/{receiverId?}', name: 'chat_index')]
     public function index(
-        int $receiverId,
+        ?int $receiverId,
         MessageRepository $messageRepository,
         EntityManagerInterface $entityManager,
         Request $request
     ): Response
     {
+        if (!$receiverId) {
+            return new Response('Aucun utilisateur sélectionné.', Response::HTTP_BAD_REQUEST);
+        }
         /** @var User $currentUser */
         $currentUser = $this->getUser();
         if (!$currentUser instanceof UserInterface){
@@ -42,12 +45,12 @@ final class ChatController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $message->setSender($currentUser);
             $message->setReceiver($receiver);
-            $message->setCreatedAt(new \DateTime());
+            $message->setCreatedAt(new \DateTimeImmutable());
 
             $entityManager->persist($message);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_chat', ['receiverId' => $receiverId]);
+            return $this->redirectToRoute('chat_index', ['receiverId' => $receiverId]);
         }
         return $this->render('chat/index.html.twig', [
             'messages' => $messages,
