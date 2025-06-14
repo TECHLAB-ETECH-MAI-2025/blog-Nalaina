@@ -1,0 +1,9 @@
+{% for message in messages %}
+    <div class="mb-2 {% if message.sender == app.user %}text-end{% endif %}">
+        <div class="fw-bold">{{ message.sender.username }}</div>
+        <div>{{ message.content }}</div>
+        <small class="text-muted">{{ message.createdAt|date('H:i:s') }}</small>
+    </div>
+{% else %}
+    <div class="text-muted text-center">Aucun message pour le moment.</div>
+{% endfor %}

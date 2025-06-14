@@ -1,11 +1,14 @@
 import $ from 'jquery';
 $(document).ready(function() {
+    const receiverId = $('#receiver-id').val();
+
     function loadMessages() {
         $.ajax({
-            url: '/chat/messages',
+            url: '/chat/messages?receiver=' + receiverId,
             type: 'GET',
             success: function(response) {
                 $('#chat-messages').html(response);
+                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
             },
             error: function() {
                 console.error('Erreur lors du chargement des messages');
@@ -17,21 +20,22 @@ $(document).ready(function() {
     setInterval(loadMessages, 2000);
 
     // Envoyer un message
-    $('#send-message').click(function(e) {
+    $('#send-message').on('click', function(e) {
         e.preventDefault();
         
-        var content = $('#message-content').val();
-        if (!content.trim()) return;
+        var content = $('textarea[name$="[content]"]').val();
+        if (!content || !content.trim()) return;
+
 
         $.ajax({
             url: '/chat/send',
             type: 'POST',
             data: {
                 content: content,
-                receiver: $('#receiver-id').val()
+                receiver: receiverId
             },
             success: function() {
-                $('#message-content').val('');
+                $('textarea[name$="[content]"]').val('');
                 // Forcer le rafraîchissement des messages
                 loadMessages();
             },

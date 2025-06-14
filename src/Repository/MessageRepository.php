@@ -30,4 +30,15 @@ class MessageRepository extends ServiceEntityRepository
                ->getResult()
            ;
        }
+
+       public function countMessageWithUser( int $currentUserId, int $otherUserId): int
+       {
+            return (int) $this->createQueryBuilder('m')
+                ->select('COUNT(m.id)')
+                ->where('(m.sender = :current AND m.receiver = :other) OR (m.sender = :other AND m.receiver = :current)')
+                ->setParameter('current', $currentUserId)
+                ->setParameter('other', $otherUserId)
+                ->getQuery()
+                ->getResult();
+       }
 }
