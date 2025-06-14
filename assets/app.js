@@ -1,6 +1,5 @@
 import './styles/app.scss';
 	import 'bootstrap';
-	import 'bootstrap/dist/css/bootstrap.min.css';
 
 	// Initialisation globale
 	document.addEventListener('DOMContentLoaded', () => {

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-$(document).ready(function() {
+$(function() {
     const receiverId = $('#receiver-id').val();
 
     function loadMessages() {
