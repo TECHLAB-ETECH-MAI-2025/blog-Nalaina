@@ -24,6 +24,13 @@
             </div>
 
             <div class="mb-3">
+                {{ form_label(registrationForm.username, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(registrationForm.username, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(registrationForm.username) }}
+            </div>
+
+
+            <div class="mb-3">
                 {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'form-label'}}) }}
                 {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(registrationForm.email) }}

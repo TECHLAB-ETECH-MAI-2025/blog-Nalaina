@@ -62,9 +62,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        // $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
         // $this->roles = ['ROLE_USER']; 
-        // $this->isVerified = false;
+        $this->isVerified = false;
         $this->sentMessages = new ArrayCollection();
         $this->receivedMessages = new ArrayCollection();
     }

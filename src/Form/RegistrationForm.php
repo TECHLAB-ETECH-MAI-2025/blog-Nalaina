@@ -37,6 +37,25 @@ class RegistrationForm extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
+            ->add('username', TextType::class, [
+                'label' => 'Nom d\'utilisateur',
+                'required' => true,
+                'attr' => [
+                    'placeholder' => 'Votre nom d\'utilisateur',
+                    'class' => 'form-control'
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer un nom d\'utilisateur',
+                    ]),
+                    new Length([
+                        'min' => 3,
+                        'max' => 20,
+                        'minMessage' => 'Le nom d\'utilisateur doit contenir au moins {{ limit }} caractères',
+                        'maxMessage' => 'Le nom d\'utilisateur ne peut pas dépasser {{ limit }} caractères',
+                    ]),
+                ],
+            ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'required' => true,
