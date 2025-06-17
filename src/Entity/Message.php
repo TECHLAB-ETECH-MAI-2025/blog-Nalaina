@@ -15,11 +15,11 @@ class Message
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'sentMessages')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $sender = null;
 
     #[ORM\ManyToOne(inversedBy: 'receivedMessages')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $receiver = null;
 
     #[ORM\Column(type: Types::TEXT)]
