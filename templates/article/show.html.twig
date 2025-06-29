@@ -35,11 +35,15 @@
 
                 <div class="icon-stats">
                     <span>
-                        <button class="like-button {{ article.isLikedByIp(app.request.clientIp) ? 'liked' : '' }}" 
-                                data-article-id="{{ article.id }}" 
-                                data-url="{{ path('api_article_like', {id: article.id}) }}">
-                            ❤️
-                        </button>
+
+                        <button class="like-button {{ article.isLikedByUser(app.user) ? 'liked' : '' }}">
+                            {% if article.isLikedByUser(app.user) %}
+                                <i class="fas fa-heart" style="color: red;"></i>
+                            {% else %}
+                                <i class="far fa-heart" style="color: red;"></i>
+                            {% endif %}
+                        </button> 
+
                         <span id="likes-count">{{ article.getLikeCount() }}</span>
                     </span>
 

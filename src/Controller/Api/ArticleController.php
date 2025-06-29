@@ -147,20 +147,19 @@ class ArticleController extends AbstractController
         ], Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/api/article/{id}/like', name: 'api_article_like', methods: ['GET','POST'])]
+    #[Route('/article/{id}/like', name: 'api_article_like', methods: ['GET','POST'])]
     public function likeArticle(
         Article $article,
         Request $request,
         EntityManagerInterface $entityManager,
         ArticleLikeRepository $articleLikeRepository
     ): JsonResponse {
-        // Utiliser l'adresse IP comme identifiant (dans un cas réel, utilisez l'ID utilisateur)
-        $ipAddress = $request->getClientIp();
+        $user = $this->getUser();
 
         // Vérifier si l'utilisateur a déjà aimé cet article
         $existingLike = $articleLikeRepository->findOneBy([
             'article' => $article,
-            'ipAddress' => $ipAddress,
+            'user' => $user,
         ]);
 
         if ($existingLike) {
@@ -177,7 +176,7 @@ class ArticleController extends AbstractController
             // Sinon, ajouter un nouveau like
             $like = new ArticleLike();
             $like->setArticle($article);
-            $like->setIpAddress($ipAddress);
+            $like->setUser($user);
             $like->setCreatedAt(new \DateTimeImmutable());
 
 

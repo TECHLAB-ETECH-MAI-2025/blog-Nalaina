@@ -60,6 +60,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'receiver')]
     private Collection $receivedMessages;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ArticleLike::class)]
+    private Collection $articleLikes;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -67,6 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isVerified = false;
         $this->sentMessages = new ArrayCollection();
         $this->receivedMessages = new ArrayCollection();
+        $this->articleLikes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -236,5 +240,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this->email;
+    }
+
+    public function getArticleLikes(): Collection
+    {
+        return $this->articleLikes;
     }
 }

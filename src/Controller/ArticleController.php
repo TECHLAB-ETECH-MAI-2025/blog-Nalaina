@@ -6,8 +6,7 @@ use App\Entity\Article;
 use App\Form\ArticleForm;
 use App\Form\CommentForm;
 use App\Entity\Comment;
-use App\Entity\ArticleLike;
-use App\Form\ArticleLikeForm;
+use App\Entity\User;
 use App\Repository\ArticleLikeRepository;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -110,12 +109,12 @@ final class ArticleController extends AbstractController
             );
         }
         // vérifier si l'article est aimé par l'utilisateur
-        $ipAddress = $request->getClientIp();
-        $isLiked = $articleLike->findOneBy([
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $isLiked = $user && $articleLike->findOneBy([
             'article' => $article,
-            'ipAddress' => $ipAddress,
+            'user' => $user,
         ]) !== null;
-
         // affichage de la vue de l'article
         return $this->render('article/show.html.twig', [
             'article' => $article,

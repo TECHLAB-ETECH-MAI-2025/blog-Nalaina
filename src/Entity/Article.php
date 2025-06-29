@@ -181,10 +181,10 @@ class Article
         return $this->likes->count();
     }   
 
-    public function isLikedByIp(?string $ipAddress): bool
+    public function isLikedByUser(User $user): bool
     {
-        foreach ($this->getLikes() as $like) {
-            if ($like->getIpAddress() === $ipAddress) {
+        foreach ($this->likes as $like) {
+            if ($like->getUser() === $user) {
                 return true;
             }
         }
